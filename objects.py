@@ -5,6 +5,8 @@ class Operator():
         self.primaries = primaries  #Lista weaponeja
         self.secondaries = secondaries  #Lista weaponeja
         self.gadgets = gadgets  #lista
+    def __repr__(self):
+        return f'{self.name}: \n {self.primaries} \n {self.secondaries} \n {self.gadgets}'
 
 
 class weapon():

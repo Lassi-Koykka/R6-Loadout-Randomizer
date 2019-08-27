@@ -20,6 +20,8 @@ for item in el:
 print(attackers)
 
 atk_operators = createOpList(attackers)
+for i in atk_operators:
+    print(i)
 
 #create a list of defenders
 soup = newSoup('https://rainbowsix.fandom.com/wiki/Category:Defender')
@@ -29,5 +31,6 @@ for item in el:
 print(defenders)
 
 def_operators = createOpList(defenders)
-
+for i in def_operators:
+    print(i)
 

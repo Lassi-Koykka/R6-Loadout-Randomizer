@@ -8,20 +8,6 @@ def newSoup(url):
     new_soup = BeautifulSoup(response.text, 'html.parser')
     return new_soup
 
-# def parseUrls(urlSoup):
-#     for link in urlSoup.find(class_='category-page__members').find_all('a'):
-#         linkAddress = link.get('href')
-#         if linkAddress == None:
-#                 return
-#         elif "/wiki/" in linkAddress:
-#                 #print("      " + link.get_text())
-#                 #print(link.get('href'))
-#                 try:
-#                     parseLists(link.get_text())
-#                 except:
-#                     print(link.get_text() + " Failed!")
-
-
 def parseLists(item):
     response = requests.get('https://rainbowsix.fandom.com/wiki/' + item)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -54,32 +40,39 @@ def parseLists(item):
                 })  #key is name of thing, val is link
             thingsList.append(tempList)
 
-    print(thingsList)
+    #print(thingsList)
     return thingsList
 
 
 def parseAttachments(weaponsList):
     weapons = []
     for i in weaponsList:  #add weapons with attachments
-        print(i)
+        #print(i)
+        #if i["name"] == "SAS":
+            #continue
+        if i["link"] == '/wiki/SASG-12':
+            i["link"] = '/wiki/SASG-12/Siege'
         attachments = []
         link = i["link"].replace(' ', '_')
         #print(link)
         response = requests.get('https://rainbowsix.fandom.com' + link)
         soup = BeautifulSoup(response.text, 'html.parser')
-
-        attachments_html = soup.find(class_='article-table').find_all('td')
-        for j in attachments_html:
-            j = str(j)
-            tempSoup = BeautifulSoup(j, 'html.parser')
-            el = tempSoup.find_all('a')
-            #parsing all <a href='link'>text</a> items to a list
-            tempList = ["No attachment"]
-            if el != []:
-                #if the list doesn't contain links it creates an empty list. ignore them
-                for k in el:
-                    tempList.append(k.get_text())
-                attachments.append(tempList)
+        try:
+            attachments_html = soup.find(class_='article-table').find_all('td')
+            for j in attachments_html:
+                j = str(j)
+                tempSoup = BeautifulSoup(j, 'html.parser')
+                el = tempSoup.find_all('a')
+                #parsing all <a href='link'>text</a> items to a list
+                tempList = ["No attachment"]
+                if el != []:
+                    #if the list doesn't contain links it creates an empty list. ignore them
+                    for k in el:
+                        tempList.append(k.get_text())
+                    attachments.append(tempList)
+        except:
+            attachments = ["-"]
+            print("No attachments found for :" + i["name"])
         weapons.append(weapon(i["name"], attachments))
 
     return weapons
@@ -87,6 +80,8 @@ def parseAttachments(weaponsList):
 def createOpList(nameList):
     operators = []
     for i in nameList:
+        if i == 'Recruit':
+            continue
         loadout = parseLists(i)
         primaries = parseAttachments(loadout[0])
         secondaries = parseAttachments(loadout[1])
