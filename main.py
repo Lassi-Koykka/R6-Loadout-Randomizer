@@ -12,25 +12,24 @@ atk_operators = []
 def_operators = []
 
 
-#Create a list of attackers
-soup = newSoup('https://rainbowsix.fandom.com/wiki/Category:Attacker')
-el = soup.find_all(class_='category-page__member-link')
-for item in el:
-    attackers.append(item.get_text())
-print(attackers)
+#Ask user what they want to do
+print("[1] Refresh operator loadout information in memory \n[2] Randomize a loadout\n")
+userInput = input()
+if userInput == '1':
+    #Create a list of attackers
+    attackers = listNames('https://rainbowsix.fandom.com/wiki/Category:Attacker')
 
-atk_operators = createOpList(attackers)
-for i in atk_operators:
-    print(i)
+    atk_operators = createOpList(attackers)
+    saveOperators(atk_operators, 'attackers')
 
-#create a list of defenders
-soup = newSoup('https://rainbowsix.fandom.com/wiki/Category:Defender')
-el = soup.find_all(class_='category-page__member-link')
-for item in el:
-    defenders.append(item.get_text())
-print(defenders)
 
-def_operators = createOpList(defenders)
-for i in def_operators:
-    print(i)
+    #create a list of defenders
+    defenders = listNames('https://rainbowsix.fandom.com/wiki/Category:Defender')
+
+    def_operators = createOpList(defenders)
+    saveOperators(def_operators, 'defenders')
+#elif userInput == '2':
+    #print("[A]ttackers\n[D]efenders")
+    #teamchoice = input()
+    #if userInput == 'A'
 

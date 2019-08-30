@@ -1,4 +1,6 @@
 import requests
+import pickle
+import random
 from objects import *
 from bs4 import BeautifulSoup
 
@@ -42,6 +44,16 @@ def parseLists(item):
 
     #print(thingsList)
     return thingsList
+
+def listNames(url):
+    namelist = []
+    soup = newSoup(url)
+    el = soup.find_all(class_='category-page__member-link')
+    for item in el:
+        namelist.append(item.get_text())
+    print(namelist)
+    return namelist
+
 
 
 def parseAttachments(weaponsList):
@@ -89,3 +101,14 @@ def createOpList(nameList):
 
         operators.append(Operator(i, primaries, secondaries, gadgets))
     return operators
+
+def saveOperators(operators, filepath):
+    opSaveFile = open(filepath, 'wb')
+    pickle.dump(operators, opSaveFile)
+    opSaveFile.close()
+
+def readOperators(filename):
+    filehandler = open(filename, 'r')
+    return pickle.load(filehandler)
+
+
