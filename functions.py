@@ -51,7 +51,9 @@ def listNames(url):
     el = soup.find_all(class_='category-page__member-link')
     for item in el:
         namelist.append(item.get_text())
+    print('\n')
     print(namelist)
+    print('\n')
     return namelist
 
 
@@ -108,7 +110,41 @@ def saveOperators(operators, filepath):
     opSaveFile.close()
 
 def readOperators(filename):
-    filehandler = open(filename, 'r')
+    filehandler = open(filename, 'rb')
     return pickle.load(filehandler)
+
+def operatorFilesExist():
+    try:
+        f1 = open('attackers')
+        f1.close()
+        f2 = open('defenders')
+        f2.close()
+    except:
+        print("Both operator files do not exist. Parsing and creating new ones\n")
+
+        attackers = listNames('https://rainbowsix.fandom.com/wiki/Category:Attacker')
+
+        atk_operators = createOpList(attackers)
+        saveOperators(atk_operators, 'attackers')
+
+
+        #create a list of defenders
+        defenders = listNames('https://rainbowsix.fandom.com/wiki/Category:Defender')
+
+        def_operators = createOpList(defenders)
+        saveOperators(def_operators, 'defenders')
+    print("Operator files found.\n")
+
+def rndFromList(list):
+    return list[random.randrange(0, len(list))]
+
+def randomizeOperator(operatorList):
+    operator = rndFromList(operatorList)
+    print(operator.name)
+    primary = rndFromList(operator[1])
+    print(primary)
+    secondary = rndFromList(operator[2])
+    print(secondary)
+
 
 

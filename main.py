@@ -28,8 +28,17 @@ if userInput == '1':
 
     def_operators = createOpList(defenders)
     saveOperators(def_operators, 'defenders')
-#elif userInput == '2':
-    #print("[A]ttackers\n[D]efenders")
-    #teamchoice = input()
-    #if userInput == 'A'
+elif userInput == '2':
+    operatorFilesExist()
+    print("[A]ttackers\n[D]efenders")
+    teamchoice = input()
+    if teamchoice == 'A':
+        atk_operators = readOperators('attackers')
+        randomizeOperator(atk_operators)
+
+    elif teamchoice == 'D':
+        def_operators = readOperators('defenders')
+
+        
+
 
