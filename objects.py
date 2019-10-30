@@ -1,3 +1,4 @@
+import json
 
 class Operator():
     def __init__(self, name, primaries, secondaries, gadgets):
@@ -7,6 +8,9 @@ class Operator():
         self.gadgets = gadgets  #lista
     def __repr__(self):
         return f'{self.name}: \n {self.primaries} \n {self.secondaries} \n {self.gadgets}'
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, 
+            sort_keys=True, indent=4)  
 
 
 class weapon():
