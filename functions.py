@@ -84,7 +84,7 @@ def parseAttachments(weaponsList):
                 tempSoup = BeautifulSoup(j, 'html.parser')
                 el = tempSoup.find_all('a')
                 #parsing all <a href='link'>text</a> items to a list
-                tempList = ["No attachment"]
+                tempList = ["-"]
                 if el != []:
                     #if the list doesn't contain links it creates an empty list. ignore them
                     for k in el:
@@ -158,7 +158,7 @@ def randomizeOperator(operatorList):
     operator = rndFromList(operatorList)
     print("\nOperator: " + operator['name'])
     primary = rndFromList(operator['primaries'])
-    print("\nPrimary: " + primary['name'])
+    print("\nPrimary: " + primary['name'] + "\n")
     for attachType in primary['attachments']:
         print("\t" + rndFromList(attachType))
     secondary = rndFromList(operator['secondaries'])
