@@ -32,13 +32,13 @@ elif userInput == '2':
     operatorFilesExist()
     print("[A]ttackers\n[D]efenders")
     teamchoice = input()
-    if teamchoice == 'A':
-        atk_operators = readOperators('attackers')
+    if teamchoice == 'A' or teamchoice == 'a':
+        atk_operators = readOperators('attackers.json')
         randomizeOperator(atk_operators)
 
-    elif teamchoice == 'D':
-        def_operators = readOperators('defenders')
-
+    elif teamchoice == 'D' or teamchoice == 'd':
+        def_operators = readOperators('defenders.json')
+        randomizeOperator(def_operators)
         
 
 

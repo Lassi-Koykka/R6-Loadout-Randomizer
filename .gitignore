@@ -1,4 +1,12 @@
 .vscode
-attackers
-defenders
-__pycache__
+attackers.json
+defenders.json
+__pycache__/
+*.pyo
+*.pyc
+*.log
+*.pot
+*.pyc
+*/*/*/__pycache__/
+*/*/__pycache__/
+*/__pycache__/

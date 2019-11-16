@@ -113,13 +113,17 @@ def createOpList(nameList):
 
 def saveOperators(operators, filepath):
     with open(filepath, 'w') as opSaveFile:
-        for operator in operators:
-            operator.toJSON()
+        opSaveFile.writelines("[")
+        for i, operator in enumerate(operators):
+            opSaveFile.writelines(operator.toJSON())
+            if i != len(operators) - 1:
+                opSaveFile.writelines(", \n")
+        opSaveFile.writelines("]")
 
 
 def readOperators(filename):
     with open(filename, 'r') as filehandler:
-        return json.load(filehandler)
+        return json.loads(filehandler.read())
 
 
 def operatorFilesExist():
@@ -152,8 +156,14 @@ def rndFromList(list):
 
 def randomizeOperator(operatorList):
     operator = rndFromList(operatorList)
-    print(operator.name)
-    primary = rndFromList(operator[1])
-    print(primary)
-    secondary = rndFromList(operator[2])
-    print(secondary)
+    print("\nOperator: " + operator['name'])
+    primary = rndFromList(operator['primaries'])
+    print("\nPrimary: " + primary['name'])
+    for attachType in primary['attachments']:
+        print("\t" + rndFromList(attachType))
+    secondary = rndFromList(operator['secondaries'])
+    print("\nSecondary: " + secondary['name'] + "\n")
+    for attachType in secondary['attachments']:
+        print("\t" + rndFromList(attachType))
+    gadget = rndFromList(operator['gadgets'])
+    print("\nGadget: " + gadget['name'] + "\n")
