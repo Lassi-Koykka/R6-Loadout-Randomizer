@@ -4,14 +4,14 @@ import random
 from objects import *
 from bs4 import BeautifulSoup
 
-
 def newSoup(url):
+    """Create a new soup object"""
     response = requests.get(url)
     new_soup = BeautifulSoup(response.text, 'html.parser')
     return new_soup
 
-
 def parseLists(item):
+    """Loads the wikipage of the operator or item and parses necessary infomation such as a name, and a list of weapons or attachments"""
     if item != 'Sentry' and item != 'Trapper':
         response = requests.get('https://rainbowsix.fandom.com/wiki/' + item)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -48,8 +48,8 @@ def parseLists(item):
         #print(thingsList)
         return thingsList
 
-
 def listNames(url):
+    """Parses a list of names from the teams wikipage"""
     namelist = []
     soup = newSoup(url)
     el = soup.find_all(class_='category-page__member-link')
@@ -63,8 +63,8 @@ def listNames(url):
     print('\n')
     return namelist
 
-
 def parseAttachments(weaponsList):
+    """Parses attachments for weapons if they have any listed"""
     weapons = []
     for i in weaponsList:  # add weapons with attachments
         #print(i)
@@ -97,8 +97,8 @@ def parseAttachments(weaponsList):
 
     return weapons
 
-
 def createOpList(nameList):
+    """Creates and returns a list of operator objects by using parseLists and parseAttachments"""
     operators = []
     for i in nameList:
         if i != 'Recruit' and i != 'Sentry' and i != 'Trapper':
@@ -110,8 +110,8 @@ def createOpList(nameList):
             operators.append(Operator(i, primaries, secondaries, gadgets))
     return operators
 
-
 def saveOperators(operators, filepath):
+    """Saves the operators to a JSON file as alist of dictionaries"""
     with open(filepath, 'w') as opSaveFile:
         opSaveFile.writelines("[")
         for i, operator in enumerate(operators):
@@ -120,13 +120,13 @@ def saveOperators(operators, filepath):
                 opSaveFile.writelines(", \n")
         opSaveFile.writelines("]")
 
-
 def readOperators(filename):
+    """Reads the operators from the JSON file as a list of dictionaries"""
     with open(filename, 'r') as filehandler:
         return json.loads(filehandler.read())
 
-
 def operatorFilesExist():
+    """Checks if both operator files exist, parses and creates new ones if they don't"""
     try:
         f1 = open('attackers.json')
         f1.close()
@@ -149,12 +149,12 @@ def operatorFilesExist():
         saveOperators(def_operators, 'defenders.json')
     print("Operator files found.\n")
 
-
 def rndFromList(list):
+    """Generates a random index number for a list and returns the object from that index"""
     return list[random.randrange(0, len(list))]
 
-
 def randomizeOperator(operatorList):
+    """returns a random operator with a randomly generated loadout from a specified teams' .json file"""
     operator = rndFromList(operatorList)
     print("\nOperator: " + operator['name'])
     primary = rndFromList(operator['primaries'])
@@ -167,3 +167,30 @@ def randomizeOperator(operatorList):
         print("\t" + rndFromList(attachType))
     gadget = rndFromList(operator['gadgets'])
     print("\nGadget: " + gadget['name'] + "\n")
+
+def updateOperatorFiles():
+    """Parses operator info again and rewrites the .json files"""
+    #Create a list of attackers
+    attackers = listNames('https://rainbowsix.fandom.com/wiki/Category:Attacker')
+
+    atk_operators = createOpList(attackers)
+    saveOperators(atk_operators, 'attackers.json')
+
+    #create a list of defenders
+    defenders = listNames('https://rainbowsix.fandom.com/wiki/Category:Defender')
+
+    def_operators = createOpList(defenders)
+    saveOperators(def_operators, 'defenders.json')
+
+def deliverOperators():
+    """Checks if operator files exist and returns a random loadout"""
+    operatorFilesExist()
+    print("[A]ttackers\n[D]efenders")
+    teamchoice = input()
+    if teamchoice == 'A' or teamchoice == 'a':
+        atk_operators = readOperators('attackers.json')
+        randomizeOperator(atk_operators)
+
+    elif teamchoice == 'D' or teamchoice == 'd':
+        def_operators = readOperators('defenders.json')
+        randomizeOperator(def_operators)

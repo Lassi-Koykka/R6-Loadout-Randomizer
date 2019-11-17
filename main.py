@@ -1,6 +1,10 @@
 import requests
 import random
-from functions import *
+from functions import (
+    listNames, saveOperators, 
+    readOperators, operatorFilesExist, 
+    createOpList, updateOperatorFiles, deliverOperators
+)
 
 from bs4 import BeautifulSoup
 import objects
@@ -16,29 +20,6 @@ def_operators = []
 print("[1] Refresh operator loadout information in memory \n[2] Randomize a loadout\n")
 userInput = input()
 if userInput == '1':
-    #Create a list of attackers
-    attackers = listNames('https://rainbowsix.fandom.com/wiki/Category:Attacker')
-
-    atk_operators = createOpList(attackers)
-    saveOperators(atk_operators, 'attackers.json')
-
-
-    #create a list of defenders
-    defenders = listNames('https://rainbowsix.fandom.com/wiki/Category:Defender')
-
-    def_operators = createOpList(defenders)
-    saveOperators(def_operators, 'defenders.json')
+    updateOperatorFiles()
 elif userInput == '2':
-    operatorFilesExist()
-    print("[A]ttackers\n[D]efenders")
-    teamchoice = input()
-    if teamchoice == 'A' or teamchoice == 'a':
-        atk_operators = readOperators('attackers.json')
-        randomizeOperator(atk_operators)
-
-    elif teamchoice == 'D' or teamchoice == 'd':
-        def_operators = readOperators('defenders.json')
-        randomizeOperator(def_operators)
-        
-
-
+    deliverOperators()
