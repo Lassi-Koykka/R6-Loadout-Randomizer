@@ -1,7 +1,6 @@
 import requests
 import json
 import random
-from objects import *
 from bs4 import BeautifulSoup
 
 def newSoup(url):
@@ -93,7 +92,7 @@ def parseAttachments(weaponsList):
         except:
             attachments = ["-"]
             print("No attachments found for :" + i["name"])
-        weapons.append(weapon(i["name"], attachments))
+        weapons.append({'name': i["name"],'attachments': attachments})
 
     return weapons
 
@@ -106,19 +105,15 @@ def createOpList(nameList):
             primaries = parseAttachments(loadout[0])
             secondaries = parseAttachments(loadout[1])
             gadgets = loadout[2]
-
-            operators.append(Operator(i, primaries, secondaries, gadgets))
+            
+            operators.append({'name': i,'primaries': primaries,'secondaries': secondaries,'gadgets': gadgets})
     return operators
 
 def saveOperators(operators, filepath):
     """Saves the operators to a JSON file as alist of dictionaries"""
     with open(filepath, 'w') as opSaveFile:
-        opSaveFile.writelines("[")
-        for i, operator in enumerate(operators):
-            opSaveFile.writelines(operator.toJSON())
-            if i != len(operators) - 1:
-                opSaveFile.writelines(", \n")
-        opSaveFile.writelines("]")
+        json.dump(operators, opSaveFile, default=lambda o: o.__dict__, 
+            sort_keys=True, indent=4)
 
 def readOperators(filename):
     """Reads the operators from the JSON file as a list of dictionaries"""
