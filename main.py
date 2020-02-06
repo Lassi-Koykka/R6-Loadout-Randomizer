@@ -7,7 +7,6 @@ from functions import (
 )
 
 from bs4 import BeautifulSoup
-import objects
 
 
 attackers = []
